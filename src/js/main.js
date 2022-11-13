@@ -1,8 +1,13 @@
 
 import $ from './lib/lib';
 
-$('button').click(function () {
-    $(this).toggleClass('active');
-   
-} );
-$('button').setAttr('data-val','asdasd');
+$('#first').click(() => {
+    $('div').eq(1).fadeToggle(800);
+})
+
+$('[data-count="second"]').click(() => {
+    $('div').eq(2).fadeOut(800);
+})
+$('button').eq(2).click(() => {
+    $('.w-500').fadeOut(800);
+})
