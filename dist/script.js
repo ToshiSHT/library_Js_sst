@@ -86,6 +86,137 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/js/lib/components/dropdown.js":
+/*!*******************************************!*\
+  !*** ./src/js/lib/components/dropdown.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.dropdown = function () {
+  for (let i = 0; i < this.length; i++) {
+    const id = this[i].getAttribute('id');
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).click(() => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(`[data-toggle-id="${id}"]`).fadeToggle(300);
+    });
+  }
+};
+Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.dropdown-toggle').dropdown();
+
+/***/ }),
+
+/***/ "./src/js/lib/components/modal.js":
+/*!****************************************!*\
+  !*** ./src/js/lib/components/modal.js ***!
+  \****************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function (created) {
+  function calcScroll() {
+    let div = document.createElement('div');
+    div.style.width = '50px';
+    div.style.height = '50px';
+    div.style.overflow = 'scroll';
+    div.style.visibility = 'hidden';
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+  }
+  const scroll = calcScroll();
+  for (let i = 0; i < this.length; i++) {
+    const target = this[i].getAttribute('data-target');
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).click(e => {
+      e.preventDefault();
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeIn(500);
+      document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = `${scroll}px`;
+    });
+    const closeElements = document.querySelectorAll(`${target} [data-close]`);
+    closeElements.forEach(elem => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(elem).click(() => {
+        Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeOut(500);
+        document.body.style.overflow = '';
+        document.body.style.marginRight = `0px`;
+        if (created) {
+          setTimeout(() => document.querySelector(target).remove(), 500);
+        }
+      });
+    });
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).click(e => {
+      if (e.target.classList.contains('modal')) {
+        Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeOut(500);
+        document.body.style.overflow = '';
+        document.body.style.marginRight = `0px`;
+        if (created) {
+          setTimeout(() => document.querySelector(target).remove(), 500);
+        }
+      }
+    });
+  }
+};
+Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('[data-toggle="modal"]').modal(); //инициализация триггеров для открытия модальных окон
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createModal = function () {
+  let {
+    text,
+    btns
+  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  for (let i = 0; i < this.length; i++) {
+    let modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.setAttribute('id', this[i].getAttribute('data-target').slice(1));
+    const buttons = [];
+    for (let j = 0; j < btns.count; j++) {
+      const [btnName, btnClasses, btnClose, btnCallBackFun] = [...btns.settings[j]];
+      let btn = document.createElement('button');
+      btn.classList.add('btn', ...btnClasses);
+      btn.textContent = btnName;
+      if (btnClose) {
+        btn.setAttribute('data-close', 'true');
+      }
+      if (btnCallBackFun && typeof btnCallBackFun == 'function') {
+        btn.addEventListener('click', btnCallBackFun);
+      }
+      buttons.push(btn);
+    }
+    modal.innerHTML = `
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <button class="close" data-close>
+                <span>&times;</span>
+            </button>
+            <div class="modal-header">
+                <div class="modal-title">
+                    ${text.title}
+                </div>
+            </div>
+            <div class="modal-body">
+                ${text.body}
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+        `;
+    modal.querySelector('.modal-footer').append(...buttons);
+    document.body.append(modal);
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).modal(true);
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].getAttribute('data-target')).fadeIn(500);
+  }
+};
+
+/***/ }),
+
 /***/ "./src/js/lib/core.js":
 /*!****************************!*\
   !*** ./src/js/lib/core.js ***!
@@ -134,6 +265,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_attributes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/attributes */ "./src/js/lib/modules/attributes.js");
 /* harmony import */ var _modules_handlers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/handlers */ "./src/js/lib/modules/handlers.js");
 /* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/effects */ "./src/js/lib/modules/effects.js");
+/* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dropdown */ "./src/js/lib/components/dropdown.js");
+/* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
+
+
 
 
 
@@ -505,6 +640,20 @@ Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('[data-count="second"]'
 });
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('button').eq(2).click(() => {
   Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.w-500').fadeOut(800);
+});
+Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#trigger').click(() => {
+  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#trigger').createModal({
+    text: {
+      title: 'Бла бла бла',
+      body: 'епта оно работает ыдоваржфыра фждлывоа фыдлваофывадл офы'
+    },
+    btns: {
+      count: 3,
+      settings: [['1 кнопка', ['btn-primary'], false, () => alert('super')],
+      // text class close? callback
+      ['close', ['btn-warning', 'ml-10'], true, ''], ['super close', ['btn-dark', 'ml-10'], true, '']]
+    }
+  });
 });
 
 /***/ })
